@@ -2,24 +2,23 @@
 Event triggers when browser commits to loading given webpage.
 */
 
-chrome.webNavigation.onCommitted.addEventListener(function(tab){
-
+chrome.webNavigation.onCommitted.addListener(function(tab){
     if(tab.frameId == 0){
         chrome.tabs.query({active:true,lastFocusedWindow:true}, tabs => {
-            
+            let tabId = tabs[0].id
             let url = tabs[0].url;
             let parsedUrl = url.replace("https://", "")
             .replace ("http://", "")
             .replace("www.","")
 
-            let domain = parsedUrl.slick(0, parsedUrlindexOf('/')==-1?parsedUrl.length:parsedUrlindexOf('/'))
-            .slice(0,parsedUrl.indexOf('?')==-1?parsedUrl.length:parsedUrlindexOf('?'));
+            let domain = parsedUrl.slice(0, parsedUrl.indexOf('/')==-1?parsedUrl.length:parsedUrl.indexOf('/'))
+            .slice(0,parsedUrl.indexOf('?')==-1?parsedUrl.length:parsedUrl.indexOf('?'));
 
             try{
-                if(domain.length < 1 || domain === null || domain ===undefined){
+                if(domain.length < 1 || domain === null || domain === undefined){
                     return;
                 }else if(domain =="linkedin.com"){
-                    runLinkedinScript();
+                    runLinkedinScript(tabId);
                     return;
                 }
             }catch(err){
@@ -29,9 +28,10 @@ chrome.webNavigation.onCommitted.addEventListener(function(tab){
     }
 });
 
-function runLinkedinScript(){
-    chrime.tabs.executeScript({
-        file:'linkedin.js'
+function runLinkedinScript(tabId){
+    chrome.scripting.executeScript({
+        target: {tabId: tabId},
+        files: ["linkedin.js"]
     });
     return true;
 }

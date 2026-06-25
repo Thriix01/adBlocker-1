@@ -27,5 +27,5 @@ removeAds();
 
 //Ensure the culling continues down the page
 setInterval(function(){
-    removeAds
+    removeAds();
 },100)
