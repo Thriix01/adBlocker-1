@@ -21,6 +21,11 @@ function removeAds(){
             card.setAttribute("style","display:none !important;");
         }
     }
+    let iframes = document.getElementsByTagName("iframe");
+    for(let i=0; i<iframes.length;i++){
+        //BOMB THE ADDDDDDDDDDD
+        iframes[i].setAttribute("style","display:none !important;");
+    }
 }
 
 removeAds();
